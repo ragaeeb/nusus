@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nusus
 
-## Getting Started
+[![wakatime](https://wakatime.com/badge/user/a0b906ce-b8e7-4463-8bce-383238df6d4b/project/ed234cdd-0063-4e9d-a56a-0cd6d944b633.svg)](https://wakatime.com/badge/user/a0b906ce-b8e7-4463-8bce-383238df6d4b/project/ed234cdd-0063-4e9d-a56a-0cd6d944b633)
+[![Vercel Deploy](https://deploy-badge.vercel.app/vercel/quilliyo)](https://quilliyo.vercel.app)
+[![codecov](https://codecov.io/gh/ragaeeb/quilliyo/graph/badge.svg?token=A2E06C7QXO)](https://codecov.io/gh/ragaeeb/quilliyo)
+[![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label&color=blue)](https://www.typescriptlang.org)
+[![Node.js CI](https://github.com/ragaeeb/quilliyo/actions/workflows/build.yml/badge.svg)](https://github.com/ragaeeb/quilliyo/actions/workflows/build.yml)
+![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)
+![GitHub License](https://img.shields.io/github/license/ragaeeb/quilliyo)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-First, run the development server:
+A NextJS 15 app for YouTube videos with enhanced subtitle overlays.
+
+## Setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- YouTube URL input with validation
+- Real-time subtitle synchronization
+- Toggle subtitle position (overlay/below video)
+- Beautiful UI with MagicUI components
+- Optimized re-renders
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+├── page.tsx              # Main page
+├── layout.tsx            # Root layout
+├── globals.css           # Global styles
+└── api/
+    └── subtitles/
+        └── route.ts      # Subtitle API
+components/
+└── ui/
+    ├── border-beam.tsx   # MagicUI component
+    └── shimmer-button.tsx # MagicUI component
+lib/
+└── utils.ts              # Utilities
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ShadCN Components Required
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Install the following ShadCN components:
 
-## Deploy on Vercel
+```bash
+npx shadcn@latest add input button card label radio-group
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 15.5
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- ShadCN UI
+- MagicUI
+- Framer Motion
