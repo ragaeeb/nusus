@@ -270,7 +270,7 @@ const TextAnimateBase = ({
                 {accessible && <span className="sr-only">{children}</span>}
                 {segments.map((segment, i) => (
                     <motion.span
-                        key={`${by}-${segment}-${i}`}
+                        key={`${by}-${segment}-${i.toString()}`}
                         variants={finalVariants.item}
                         custom={i * staggerTimings[by]}
                         className={cn(
