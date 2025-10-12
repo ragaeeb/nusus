@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
-import { RainbowButton } from '@/components/ui/rainbow-button';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { MorphingText } from '@/components/ui/morphing-text';
+import { ShimmerButton } from '@/components/ui/shimmer-button';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { getTranscript } from '@/lib/db';
 import { extractVideoId } from '@/lib/youtube';
 
-type PageProps = { params: { videoId: string } };
+type PageProps = { params: Promise<{ videoId: string }> };
 
 export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
     const { videoId: rawVideoId } = await params;
@@ -29,27 +31,32 @@ export const generateMetadata = async ({ params }: PageProps): Promise<Metadata>
 
 export default async function VideoPage({ params }: PageProps) {
     const { videoId: rawVideoId } = await params;
-    const extractedId = extractVideoId(rawVideoId);
-
-    if (extractedId && extractedId !== rawVideoId) {
-        redirect(`/${extractedId}`);
-    }
-
-    const videoId = extractedId || rawVideoId;
+    const videoId = extractVideoId(rawVideoId) || rawVideoId;
     const transcript = await getTranscript(videoId);
 
     if (!transcript) {
-        return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
-                <div className="text-center">
-                    <h1 className="mb-4 font-bold text-4xl text-white">Video Not Found</h1>
-                    <p className="text-slate-400">The requested video transcript could not be found.</p>
-                    <RainbowButton asChild className="mt-6 inline-block rounded-lg px-6" variant="outline">
-                        <a href="/">Go Home</a>
-                    </RainbowButton>
+        const isValidYouTubeId = /^[a-zA-Z0-9_-]{11}$/.test(videoId);
+
+        if (isValidYouTubeId) {
+            return (
+                <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
+                    <div className="text-center">
+                        <MorphingText
+                            className="mb-4 font-bold text-4xl text-white"
+                            texts={['Video', 'Not', 'Found']}
+                        />
+                        <p className="mb-6 text-lg text-slate-400">This video doesn't have subtitles yet.</p>
+                        <div className="flex items-center justify-center gap-4">
+                            <Link href={`/${videoId}/new`}>
+                                <ShimmerButton background="rgba(18,18,19,0.6)">Create Transcript</ShimmerButton>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
+
+        notFound();
     }
 
     const cleanTranscript = {

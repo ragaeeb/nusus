@@ -1,22 +1,49 @@
 'use client';
 
-import { useMemo } from 'react';
+import { formatSecondsToTimestamp } from 'paragrafs';
+import { useCallback, useMemo, useState } from 'react';
 import { SubtitleDisplay } from '@/components/SubtitleDisplay';
+import { TypoReportForm } from '@/components/TypoReportForm';
 import { AuroraText } from '@/components/ui/aurora-text';
 import { MagicCard } from '@/components/ui/magic-card';
-import { useYouTube } from '@/hooks/useYouTube';
+import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import type { TranscriptData } from '@/lib/db';
 import { parseSubtitles } from '@/lib/time';
+import type { Subtitle } from '@/types/subtitles';
 
 type VideoPlayerProps = { videoId: string; transcript: TranscriptData };
 
-export const VideoPlayer = ({ videoId, transcript }: VideoPlayerProps) => {
-    const subtitles = useMemo(
-        () => ({ ar: transcript.ar ? parseSubtitles(transcript.ar) : undefined, en: parseSubtitles(transcript.en) }),
-        [transcript.en, transcript.ar],
-    );
+const findCurrentSubtitle = (subtitles: Subtitle[], currentTime: number): Subtitle | undefined => {
+    return subtitles.find((sub, i) => {
+        const nextSub = subtitles[i + 1];
+        return sub.seconds <= currentTime && (!nextSub || currentTime < nextSub.seconds);
+    });
+};
 
-    const { containerRef, currentSubtitle } = useYouTube(videoId, subtitles.en);
+export const VideoPlayer = ({ videoId, transcript }: VideoPlayerProps) => {
+    const [showTypoForm, setShowTypoForm] = useState(false);
+    const [reportingSubtitle, setReportingSubtitle] = useState<Subtitle | null>(null);
+
+    const subtitles = useMemo(() => parseSubtitles(transcript.en), [transcript.en]);
+
+    const { currentTime, player, containerRef } = useYouTubePlayer(videoId);
+
+    const currentSubtitle = useMemo(() => findCurrentSubtitle(subtitles, currentTime), [subtitles, currentTime]);
+
+    const handleReportTypo = useCallback(() => {
+        if (currentSubtitle) {
+            setReportingSubtitle({
+                ...currentSubtitle,
+                time: formatSecondsToTimestamp(player?.getCurrentTime() || currentSubtitle.seconds),
+            });
+            setShowTypoForm(true);
+        }
+    }, [currentSubtitle, player]);
+
+    const handleCloseTypoForm = useCallback(() => {
+        setShowTypoForm(false);
+        setReportingSubtitle(null);
+    }, []);
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
@@ -36,8 +63,14 @@ export const VideoPlayer = ({ videoId, transcript }: VideoPlayerProps) => {
                         <div className="relative">
                             <div ref={containerRef} className="aspect-video w-full rounded-t-lg" />
                         </div>
-                        <div className="p-6">{currentSubtitle && <SubtitleDisplay subtitle={currentSubtitle} />}</div>
+                        <div className="p-6">
+                            <SubtitleDisplay subtitle={currentSubtitle} onReportTypo={handleReportTypo} />
+                        </div>
                     </MagicCard>
+
+                    {showTypoForm && reportingSubtitle && (
+                        <TypoReportForm subtitle={reportingSubtitle} videoId={videoId} onClose={handleCloseTypoForm} />
+                    )}
                 </div>
             </div>
         </div>
