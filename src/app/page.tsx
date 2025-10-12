@@ -1,14 +1,17 @@
 'use client';
 
+import { useAuth } from '@workos-inc/authkit-nextjs/components';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import SubmittableInput from '@/components/submittable-input';
 import { AuroraText } from '@/components/ui/aurora-text';
+import { Button } from '@/components/ui/button';
 import { Highlighter } from '@/components/ui/highlighter';
 import { extractVideoId } from '@/lib/youtube';
 
 export default function Home() {
     const router = useRouter();
+    const { user } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -59,9 +62,21 @@ export default function Home() {
                     type="text"
                     placeholder="https://youtube.com/watch?v=..."
                     onSubmit={handleSubmit}
-                    className="h-14 bg-slate-800/50 text-lg text-white placeholder:text-slate-500"
+                    className="mb-6 h-14 bg-slate-800/50 text-lg text-white placeholder:text-slate-500"
                     disabled={loading}
                 />
+
+                <div className="flex items-center justify-center gap-4">
+                    {user ? (
+                        <Button variant="outline" onClick={() => router.push('/dashboard')} className="bg-slate-800/50">
+                            Go to Dashboard
+                        </Button>
+                    ) : (
+                        <Button onClick={() => router.push('/api/auth/login')} className="bg-slate-200/50">
+                            Sign In
+                        </Button>
+                    )}
+                </div>
             </div>
         </div>
     );

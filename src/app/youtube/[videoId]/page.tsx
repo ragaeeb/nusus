@@ -7,7 +7,7 @@ import { VideoPlayer } from '@/components/VideoPlayer';
 import { getTranscript } from '@/lib/db';
 import { extractVideoId, isValidYouTubeId } from '@/lib/youtube';
 
-type PageProps = { params: Promise<{ videoId: string }> };
+type PageProps = { params: Promise<{ videoId: string }>; searchParams: Promise<{ t?: string }> };
 
 export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
     const { videoId: rawVideoId } = await params;
@@ -45,7 +45,7 @@ const CreateNewTranscript = ({ videoId }: { videoId: string }) => {
     );
 };
 
-export default async function VideoPage({ params }: PageProps) {
+export default async function VideoPage({ params, searchParams }: PageProps) {
     const { videoId: rawVideoId } = await params;
     const videoId = extractVideoId(rawVideoId) || rawVideoId;
     const transcript = await getTranscript(videoId);
@@ -60,5 +60,5 @@ export default async function VideoPage({ params }: PageProps) {
 
     const cleanTranscript = { en: transcript.en, title: transcript.title, videoId: transcript.videoId };
 
-    return <VideoPlayer transcript={cleanTranscript} />;
+    return <VideoPlayer transcript={cleanTranscript} searchParams={searchParams} />;
 }

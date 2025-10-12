@@ -1,8 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { use, useCallback, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 import { AuroraText } from '@/components/ui/aurora-text';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MagicCard } from '@/components/ui/magic-card';
@@ -11,13 +12,36 @@ import { Textarea } from '@/components/ui/textarea';
 
 type PageProps = { params: Promise<{ videoId: string }> };
 
-export default function CreateVideoPage({ params }: PageProps) {
+export default function EditVideoPage({ params }: PageProps) {
     const { videoId } = use(params);
     const router = useRouter();
     const [title, setTitle] = useState('');
     const [subtitles, setSubtitles] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        const loadTranscript = async () => {
+            try {
+                const response = await fetch(`/api/transcripts/${videoId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setTitle(data.title);
+                    setSubtitles(data.en);
+                } else {
+                    setError('Failed to load transcript');
+                }
+            } catch (err) {
+                console.error(err);
+                setError('An error occurred while loading the transcript');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadTranscript();
+    }, [videoId]);
 
     const handleSubmit = useCallback(
         async (e: React.FormEvent) => {
@@ -29,24 +53,32 @@ export default function CreateVideoPage({ params }: PageProps) {
                 const response = await fetch('/api/transcripts', {
                     body: JSON.stringify({ en: subtitles, title, videoId }),
                     headers: { 'Content-Type': 'application/json' },
-                    method: 'POST',
+                    method: 'PUT',
                 });
 
                 if (response.ok) {
                     router.push(`/youtube/${videoId}`);
                 } else {
                     const data = await response.json();
-                    setError(data.error || 'Failed to create transcript');
+                    setError(data.error || 'Failed to update transcript');
                 }
             } catch (err) {
                 console.error(err);
-                setError('An error occurred while creating the transcript');
+                setError('An error occurred while updating the transcript');
             } finally {
                 setIsSubmitting(false);
             }
         },
         [videoId, title, subtitles, router],
     );
+
+    if (isLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+                <p className="text-slate-400">Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
@@ -57,8 +89,8 @@ export default function CreateVideoPage({ params }: PageProps) {
                             Nuṣūṣ
                         </AuroraText>
                     </a>
-                    <h1 className="mt-4 font-semibold text-2xl text-white">Create New Transcript</h1>
-                    <p className="mt-2 text-slate-400">Add subtitles for video: {videoId}</p>
+                    <h1 className="mt-4 font-semibold text-2xl text-white">Edit Transcript</h1>
+                    <p className="mt-2 text-slate-400">Editing video: {videoId}</p>
                 </div>
 
                 <MagicCard className="border-slate-800 bg-slate-900/50 backdrop-blur-xl">
@@ -104,9 +136,24 @@ export default function CreateVideoPage({ params }: PageProps) {
                                 </div>
                             )}
 
-                            <RainbowButton type="submit" disabled={isSubmitting} className="w-full" variant="outline">
-                                {isSubmitting ? 'Creating...' : 'Save'}
-                            </RainbowButton>
+                            <div className="flex gap-4">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => router.push(`/youtube/${videoId}`)}
+                                    className="flex-1"
+                                >
+                                    Cancel
+                                </Button>
+                                <RainbowButton
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="flex-1"
+                                    variant="outline"
+                                >
+                                    {isSubmitting ? 'Saving...' : 'Save Changes'}
+                                </RainbowButton>
+                            </div>
                         </form>
                     </div>
                 </MagicCard>

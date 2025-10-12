@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-    experimental: { optimizePackageImports: ['lucide-react', '@radix-ui/react-label'] },
+    experimental: { optimizePackageImports: ['lucide-react', '@radix-ui/react-label'], typedRoutes: true },
     reactStrictMode: true,
 };
 
