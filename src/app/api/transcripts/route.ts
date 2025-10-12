@@ -5,7 +5,7 @@ import clientPromise from '@/lib/mongodb';
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
     try {
         const body = await request.json();
-        const { videoId, title, description, en } = body;
+        const { videoId, title, en } = body;
 
         if (!videoId || !title || !en) {
             return NextResponse.json(
@@ -20,12 +20,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
         await collection.createIndex({ videoId: 1 }, { unique: true });
 
-        const document: TranscriptData = {
-            en: en.trim(),
-            title: title.trim(),
-            videoId: videoId.trim(),
-            ...(description?.trim() && { description: description.trim() }),
-        };
+        const document: TranscriptData = { en: en.trim(), title: title.trim(), videoId: videoId.trim() };
 
         await collection.insertOne(document);
 

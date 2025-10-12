@@ -11,3 +11,5 @@ export const extractVideoId = (url: string) => {
         }
     }
 };
+
+export const isValidYouTubeId = (videoId: string) => /^[a-zA-Z0-9_-]{11}$/.test(videoId);

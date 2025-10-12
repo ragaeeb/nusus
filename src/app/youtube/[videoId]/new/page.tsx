@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { use, useCallback, useState } from 'react';
 import { AuroraText } from '@/components/ui/aurora-text';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MagicCard } from '@/components/ui/magic-card';
 import { RainbowButton } from '@/components/ui/rainbow-button';
@@ -14,7 +15,6 @@ export default function CreateVideoPage({ params }: PageProps) {
     const { videoId } = use(params);
     const router = useRouter();
     const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
     const [subtitles, setSubtitles] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -27,7 +27,7 @@ export default function CreateVideoPage({ params }: PageProps) {
 
             try {
                 const response = await fetch('/api/transcripts', {
-                    body: JSON.stringify({ description, en: subtitles, title, videoId }),
+                    body: JSON.stringify({ en: subtitles, title, videoId }),
                     headers: { 'Content-Type': 'application/json' },
                     method: 'POST',
                 });
@@ -39,12 +39,13 @@ export default function CreateVideoPage({ params }: PageProps) {
                     setError(data.error || 'Failed to create transcript');
                 }
             } catch (err) {
+                console.error(err);
                 setError('An error occurred while creating the transcript');
             } finally {
                 setIsSubmitting(false);
             }
         },
-        [videoId, title, description, subtitles, router],
+        [videoId, title, subtitles, router],
     );
 
     return (
@@ -65,7 +66,7 @@ export default function CreateVideoPage({ params }: PageProps) {
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
                                 <Label className="mb-2 block font-medium text-slate-300 text-sm">Video ID</Label>
-                                <input
+                                <Input
                                     type="text"
                                     value={videoId}
                                     disabled
@@ -75,7 +76,7 @@ export default function CreateVideoPage({ params }: PageProps) {
 
                             <div>
                                 <Label className="mb-2 block font-medium text-slate-300 text-sm">Title *</Label>
-                                <input
+                                <Input
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
@@ -86,20 +87,7 @@ export default function CreateVideoPage({ params }: PageProps) {
                             </div>
 
                             <div>
-                                <Label className="mb-2 block font-medium text-slate-300 text-sm">Description</Label>
-                                <input
-                                    type="text"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white transition-colors focus:border-purple-500 focus:outline-none"
-                                    placeholder="Optional description"
-                                />
-                            </div>
-
-                            <div>
-                                <Label className="mb-2 block font-medium text-slate-300 text-sm">
-                                    Subtitles (SRT or VTT format) *
-                                </Label>
+                                <Label className="mb-2 block font-medium text-slate-300 text-sm">Subtitles</Label>
                                 <Textarea
                                     value={subtitles}
                                     onChange={(e) => setSubtitles(e.target.value)}

@@ -1,6 +1,6 @@
 import clientPromise from './mongodb';
 
-export type TranscriptData = { videoId: string; title: string; description?: string; en: string; ar?: string };
+export type TranscriptData = { videoId: string; title: string; en: string };
 
 export const getTranscript = async (videoId: string): Promise<TranscriptData | null> => {
     const client = await clientPromise;

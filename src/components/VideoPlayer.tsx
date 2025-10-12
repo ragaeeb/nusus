@@ -11,7 +11,7 @@ import type { TranscriptData } from '@/lib/db';
 import { parseSubtitles } from '@/lib/time';
 import type { Subtitle } from '@/types/subtitles';
 
-type VideoPlayerProps = { videoId: string; transcript: TranscriptData };
+type VideoPlayerProps = { transcript: TranscriptData };
 
 const findCurrentSubtitle = (subtitles: Subtitle[], currentTime: number): Subtitle | undefined => {
     return subtitles.find((sub, i) => {
@@ -20,11 +20,11 @@ const findCurrentSubtitle = (subtitles: Subtitle[], currentTime: number): Subtit
     });
 };
 
-export const VideoPlayer = ({ videoId, transcript }: VideoPlayerProps) => {
+export const VideoPlayer = ({ transcript: { en, videoId, title } }: VideoPlayerProps) => {
     const [showTypoForm, setShowTypoForm] = useState(false);
     const [reportingSubtitle, setReportingSubtitle] = useState<Subtitle | null>(null);
 
-    const subtitles = useMemo(() => parseSubtitles(transcript.en), [transcript.en]);
+    const subtitles = useMemo(() => parseSubtitles(en), [en]);
 
     const { currentTime, player, containerRef } = useYouTubePlayer(videoId);
 
@@ -54,8 +54,7 @@ export const VideoPlayer = ({ videoId, transcript }: VideoPlayerProps) => {
                             Nuṣūṣ
                         </AuroraText>
                     </a>
-                    <h1 className="mt-4 font-semibold text-2xl text-white">{transcript.title}</h1>
-                    {transcript.description && <p className="mt-2 text-slate-400">{transcript.description}</p>}
+                    <h1 className="mt-4 font-semibold text-2xl text-white">{title}</h1>
                 </div>
 
                 <div className="space-y-6">

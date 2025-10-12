@@ -24,7 +24,7 @@ export default function Home() {
                 return;
             }
 
-            router.push(`/${extractedId}`);
+            router.push(`/youtube/${extractedId}`);
         },
         [router],
     );
