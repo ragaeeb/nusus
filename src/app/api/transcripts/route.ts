@@ -5,7 +5,6 @@ import clientPromise from '@/lib/mongodb';
 
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
     try {
-        console.log('POST /transcripts');
         const { user } = await withAuth();
 
         if (!user) {
@@ -42,7 +41,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
     try {
-        console.log('GET /transcripts');
         const { user } = await withAuth();
 
         if (!user) {
@@ -77,7 +75,6 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 
 export const PUT = async (request: NextRequest): Promise<NextResponse> => {
     try {
-        console.log('PUT /transcripts');
         const { user } = await withAuth();
 
         if (!user) {

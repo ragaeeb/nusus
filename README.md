@@ -1,9 +1,9 @@
 # Nuṣūṣ - Enhanced YouTube Subtitles
 
-[Demo](https://nusus.netlify.app)
+[Demo](https://nusus.vercel.app)
 
 [![wakatime](https://wakatime.com/badge/user/a0b906ce-b8e7-4463-8bce-383238df6d4b/project/ed234cdd-0063-4e9d-a56a-0cd6d944b633.svg)](https://wakatime.com/badge/user/a0b906ce-b8e7-4463-8bce-383238df6d4b/project/ed234cdd-0063-4e9d-a56a-0cd6d944b633)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d4e114c7-92ce-4f4a-837f-a9583e0dc1aa/deploy-status)](https://app.netlify.com/projects/nusus/deploys)
+[![Vercel Deploy](https://deploy-badge.vercel.app/vercel/nusus)](https://nusus.vercel.app)
 [![codecov](https://codecov.io/gh/ragaeeb/nusus/graph/badge.svg?token=Y6VM7I9VL9)](https://codecov.io/gh/ragaeeb/nusus)
 [![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label&color=blue)](https://www.typescriptlang.org)
 [![Node.js CI](https://github.com/ragaeeb/nusus/actions/workflows/build.yml/badge.svg)](https://github.com/ragaeeb/nusus/actions/workflows/build.yml)
@@ -32,7 +32,7 @@ Experience YouTube videos with beautiful, synchronized subtitles and advanced tr
 - **Styling**: Tailwind CSS
 - **UI Components**: Radix UI, shadcn/ui
 - **Animations**: Framer Motion
-- **Deployment**: Netlify
+- **Deployment**: Vercel
 
 ## Prerequisites
 
@@ -162,12 +162,11 @@ src/
 
 ## Deployment
 
-### Netlify
+### Vercel
 
-1. Connect your repository to Netlify
-2. Configure environment variables in Netlify dashboard
-3. The `netlify.toml` is already configured
-4. Deploy
+1. Connect your repository to Vercel
+2. Configure environment variables in Vercel dashboard
+3. Deploy
 
 Update WorkOS redirect URIs with your production domain:
 ```text
