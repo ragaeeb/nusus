@@ -64,10 +64,11 @@ export function HyperText({
             return () => clearTimeout(startTimeout);
         }
 
+        let startTimeout: ReturnType<typeof setTimeout> | undefined;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
-                    setTimeout(() => {
+                    startTimeout = setTimeout(() => {
                         setIsAnimating(true);
                     }, delay);
                     observer.disconnect();
@@ -75,12 +76,15 @@ export function HyperText({
             },
             { rootMargin: '-30% 0px -30% 0px', threshold: 0.1 },
         );
-
         if (elementRef.current) {
             observer.observe(elementRef.current);
         }
-
-        return () => observer.disconnect();
+        return () => {
+            if (startTimeout) {
+                clearTimeout(startTimeout);
+            }
+            observer.disconnect();
+        };
     }, [delay, startOnView]);
 
     // Handle scramble animation

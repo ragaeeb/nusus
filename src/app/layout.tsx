@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en">
+        <html lang="en" className="dark">
             <body className="bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
                 <AuthKitProvider>
                     <div className="flex min-h-screen flex-col">
