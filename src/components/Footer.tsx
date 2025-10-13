@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import pkg from '@/../package.json';
 
 const version = pkg.version;
@@ -10,10 +9,10 @@ export const Footer = () => {
         <footer className="border-slate-800/50 bg-slate-950/80">
             <div className="mt-3 mb-3 border-slate-800/50 text-center text-slate-500 text-sm">
                 <p>
-                    © 2025 IlmTest. All rights reserved.{' '}
-                    <Link href={versionUrl} className="underline" target="_blank">
+                    © 2025 Ragaeeb H. All rights reserved.{' '}
+                    <a href={versionUrl} className="underline" target="_blank" rel="noopener noreferrer">
                         v{version}
-                    </Link>
+                    </a>
                 </p>
             </div>
         </footer>
