@@ -1,6 +1,7 @@
 import { authkitMiddleware } from '@workos-inc/authkit-nextjs';
 
 export default authkitMiddleware({
+    debug: true,
     middlewareAuth: {
         enabled: true,
         unauthenticatedPaths: ['/', '/youtube/:videoId', '/api/auth/login', '/api/auth/callback'],
