@@ -11,7 +11,9 @@ import { extractVideoId } from '@/lib/youtube';
 
 export default function Home() {
     const router = useRouter();
+    console.log('call useAuth');
     const { user } = useAuth();
+    console.log('useAuth', user);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 

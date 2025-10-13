@@ -1,11 +1,9 @@
 import { authkitMiddleware } from '@workos-inc/authkit-nextjs';
 
 export default authkitMiddleware({
-    debug: true,
-    middlewareAuth: {
-        enabled: true,
-        unauthenticatedPaths: ['/', '/youtube/:videoId', '/api/auth/login', '/api/auth/callback'],
-    },
+    middlewareAuth: { enabled: true, unauthenticatedPaths: ['/', '/youtube/:path*', '/api/auth/:path*'] },
 });
 
-export const config = { matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'] };
+export const config = {
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+};
