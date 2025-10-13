@@ -25,8 +25,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         const db = client.db('nusus');
         const collection = db.collection<TranscriptData>('transcripts');
 
-        await collection.createIndex({ videoId: 1 }, { unique: true });
-
         const document: TranscriptData = { en: en.trim(), title: title.trim(), videoId: videoId.trim() };
 
         await collection.insertOne(document);

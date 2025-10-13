@@ -43,9 +43,9 @@ export default async function TyposPage({ searchParams }: PageProps) {
                 ) : (
                     <>
                         <div className="space-y-4">
-                            {reports.map((report, index) => (
+                            {reports.map((report) => (
                                 <MagicCard
-                                    key={`${report.videoId}-${report.timestamp}-${index}`}
+                                    key={`${report.videoId}-${report.timestamp}-${report.createdAt}`}
                                     className="border-slate-800 bg-slate-900/50 backdrop-blur-xl"
                                 >
                                     <div className="p-4">

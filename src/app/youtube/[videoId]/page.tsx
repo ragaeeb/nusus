@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { MorphingText } from '@/components/ui/morphing-text';
 import { ShimmerButton } from '@/components/ui/shimmer-button';
 import { VideoPlayer } from '@/components/VideoPlayer';
-import { getTranscript } from '@/lib/db';
+import { getCachedTranscript } from '@/lib/caching';
 import { extractVideoId, isValidYouTubeId } from '@/lib/youtube';
 
 type PageProps = { params: Promise<{ videoId: string }>; searchParams: Promise<{ t?: string }> };
@@ -12,7 +12,7 @@ type PageProps = { params: Promise<{ videoId: string }>; searchParams: Promise<{
 export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
     const { videoId: rawVideoId } = await params;
     const videoId = extractVideoId(rawVideoId) || rawVideoId;
-    const transcript = await getTranscript(videoId);
+    const transcript = await getCachedTranscript(videoId);
 
     if (!transcript) {
         return { description: 'The requested video could not be found.', title: 'Video Not Found - Nuṣūṣ' };
@@ -48,7 +48,7 @@ const CreateNewTranscript = ({ videoId }: { videoId: string }) => {
 export default async function VideoPage({ params, searchParams }: PageProps) {
     const { videoId: rawVideoId } = await params;
     const videoId = extractVideoId(rawVideoId) || rawVideoId;
-    const transcript = await getTranscript(videoId);
+    const transcript = await getCachedTranscript(videoId);
 
     if (!transcript) {
         if (isValidYouTubeId(videoId)) {

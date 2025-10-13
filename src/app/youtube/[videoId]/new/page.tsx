@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { use, useCallback, useState } from 'react';
 import { AuroraText } from '@/components/ui/aurora-text';
@@ -52,11 +53,11 @@ export default function CreateVideoPage({ params }: PageProps) {
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
             <div className="w-full max-w-4xl">
                 <div className="mb-8 text-center">
-                    <a href="/" className="inline-block transition-transform hover:scale-105">
+                    <Link href="/" className="inline-block transition-transform hover:scale-105">
                         <AuroraText className="mb-2 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text font-bold text-4xl text-transparent">
                             Nuṣūṣ
                         </AuroraText>
-                    </a>
+                    </Link>
                     <h1 className="mt-4 font-semibold text-2xl text-white">Create New Transcript</h1>
                     <p className="mt-2 text-slate-400">Add subtitles for video: {videoId}</p>
                 </div>

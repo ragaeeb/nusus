@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { HyperText } from '@/components/ui/hyper-text';
 import { RainbowButton } from '@/components/ui/rainbow-button';
 
@@ -11,7 +12,7 @@ export default function NotFound() {
                 <h1 className="mb-4 font-bold text-4xl text-white">Video Not Found</h1>
                 <p className="mb-6 text-lg text-slate-400">The requested video transcript could not be found.</p>
                 <RainbowButton variant="outline" asChild className="inline-block rounded-lg px-6">
-                    <a href="/">Go Home</a>
+                    <Link href="/">Go Home</Link>
                 </RainbowButton>
             </div>
         </div>

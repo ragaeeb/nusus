@@ -7,7 +7,7 @@ export const getTranscript = async (videoId: string): Promise<TranscriptData | n
     const db = client.db('nusus');
     const collection = db.collection<TranscriptData>('transcripts');
 
-    const value = (await collection.findOne({ videoId })) as TranscriptData & { _id: any };
+    const value = (await collection.findOne({ videoId })) as TranscriptData & { _id: unknown };
 
     if (value) {
         const { _id, ...transcript } = value;
@@ -15,4 +15,14 @@ export const getTranscript = async (videoId: string): Promise<TranscriptData | n
     }
 
     return null;
+};
+
+export const initDB = async () => {
+    const client = await clientPromise;
+    const db = client.db('nusus');
+
+    await Promise.all([
+        db.collection('transcripts').createIndex({ videoId: 1 }, { unique: true }),
+        db.collection('typo_reports').createIndex({ createdAt: -1 }),
+    ]);
 };

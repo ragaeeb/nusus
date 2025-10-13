@@ -90,6 +90,12 @@
     animation: slide-in-from-bottom-4 0.5s ease-out;
 }
 
+.fade-slide-in {
+    animation:
+        fade-in 0.5s ease-out,
+        slide-in-from-bottom-4 0.5s ease-out;
+}
+
 @theme inline {
     --animate-aurora: aurora 8s ease-in-out infinite alternate;
     @keyframes aurora {

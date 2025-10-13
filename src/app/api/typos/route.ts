@@ -37,8 +37,11 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         }
 
         const { searchParams } = new URL(request.url);
-        const page = Number.parseInt(searchParams.get('page') || '1', 10);
-        const limit = Number.parseInt(searchParams.get('limit') || '20', 10);
+        const pageRaw = Number.parseInt(searchParams.get('page') || '1', 10);
+        const limitRaw = Number.parseInt(searchParams.get('limit') || '20', 10);
+        const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1;
+        const MAX_LIMIT = 100;
+        const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.min(limitRaw, MAX_LIMIT) : 20;
         const skip = (page - 1) * limit;
 
         const client = await clientPromise;
@@ -53,7 +56,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         const cleanReports = reports.map(({ _id, ...rest }) => rest);
 
         return NextResponse.json({
-            pagination: { limit, page, total, totalPages: Math.ceil(total / limit) },
+            pagination: { limit, page, total, totalPages: Math.max(1, Math.ceil(total / limit)) },
             reports: cleanReports,
         });
     } catch (error) {

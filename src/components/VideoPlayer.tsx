@@ -29,8 +29,8 @@ export const VideoPlayer = ({ transcript: { en, videoId, title }, searchParams }
     const [showShareSuccess, setShowShareSuccess] = useState(false);
 
     const startTime = useMemo(() => {
-        const t = resolvedSearchParams.t;
-        return t ? Number.parseInt(t, 10) : 0;
+        const seconds = Number.parseInt(resolvedSearchParams.t ?? '0', 10);
+        return Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
     }, [resolvedSearchParams]);
 
     const subtitles = useMemo(() => parseSubtitles(en), [en]);

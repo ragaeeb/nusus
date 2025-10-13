@@ -71,6 +71,7 @@ export const TypoReportForm = memo(({ subtitle, videoId, onClose }: TypoReportFo
                         onClick={onClose}
                         className="text-slate-400 transition-colors hover:text-white"
                         type="button"
+                        aria-label="Close typo report form"
                     >
                         <X className="h-5 w-5" />
                     </button>
@@ -78,9 +79,12 @@ export const TypoReportForm = memo(({ subtitle, videoId, onClose }: TypoReportFo
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <Label className="mb-2 block text-slate-400 text-sm">Suggested Correction:</Label>
+                        <Label htmlFor="suggestedText" className="mb-2 block text-slate-400 text-sm">
+                            Suggested Correction:
+                        </Label>
                         <Textarea
                             ref={textareaRef}
+                            id="suggestedText"
                             name="suggestedText"
                             defaultValue={subtitle.text}
                             onChange={handleTextareaChange}

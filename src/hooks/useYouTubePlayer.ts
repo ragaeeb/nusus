@@ -15,7 +15,7 @@ declare global {
     interface Window {
         YT: {
             Player: new (element: HTMLElement, config: any) => YouTubePlayer;
-            PlayerState: { PAUSED: number; PLAYING: number };
+            PlayerState: { PAUSED: number; PLAYING: number; ENDED: number };
         };
         onYouTubeIframeAPIReady: () => void;
     }
@@ -26,7 +26,7 @@ export const useYouTubePlayer = (videoId: string, startTime = 0) => {
     const playerRef = useRef<YouTubePlayer | null>(null);
     const [currentTime, setCurrentTime] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const isReadyRef = useRef(false);
     const hasStartedRef = useRef(false);
 
@@ -71,6 +71,10 @@ export const useYouTubePlayer = (videoId: string, startTime = 0) => {
                                 setCurrentTime(time);
                             }, 100);
                         }
+
+                        if (event.data === window.YT.PlayerState.ENDED) {
+                            clearTimeUpdateInterval();
+                        }
                     },
                 },
                 height: '100%',
@@ -83,8 +87,14 @@ export const useYouTubePlayer = (videoId: string, startTime = 0) => {
         if (!window.YT && videoId) {
             const tag = document.createElement('script');
             tag.src = 'https://www.youtube.com/iframe_api';
+
             const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag?.parentNode?.insertBefore(tag, firstScriptTag);
+            if (firstScriptTag?.parentNode) {
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            } else {
+                (document.head || document.body || document.documentElement).appendChild(tag);
+            }
+
             window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
         } else if (videoId && containerRef.current && !playerRef.current) {
             onYouTubeIframeAPIReady();
@@ -98,6 +108,10 @@ export const useYouTubePlayer = (videoId: string, startTime = 0) => {
                 playerRef.current.destroy();
                 playerRef.current = null;
             }
+
+            try {
+                (window as any).onYouTubeIframeAPIReady = undefined;
+            } catch {}
         };
     }, [videoId, startTime, clearTimeUpdateInterval]);
 

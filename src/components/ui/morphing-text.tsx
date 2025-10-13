@@ -42,14 +42,14 @@ const useMorphingText = (texts: string[]) => {
 
         let fraction = morphRef.current / morphTime;
 
-        if (fraction > 1) {
+        if (fraction >= 1) {
             cooldownRef.current = cooldownTime;
             fraction = 1;
         }
 
         setStyles(fraction);
 
-        if (fraction === 1) {
+        if (cooldownRef.current > 0) {
             textIndexRef.current++;
         }
     }, [setStyles]);

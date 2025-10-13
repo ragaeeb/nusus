@@ -1,6 +1,6 @@
 # Nuṣūṣ - Enhanced YouTube Subtitles
 
-[https://nusus.netlify.app](Demo)
+[Demo](https://nusus.netlify.app)
 
 [![wakatime](https://wakatime.com/badge/user/a0b906ce-b8e7-4463-8bce-383238df6d4b/project/ed234cdd-0063-4e9d-a56a-0cd6d944b633.svg)](https://wakatime.com/badge/user/a0b906ce-b8e7-4463-8bce-383238df6d4b/project/ed234cdd-0063-4e9d-a56a-0cd6d944b633)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d4e114c7-92ce-4f4a-837f-a9583e0dc1aa/deploy-status)](https://app.netlify.com/projects/nusus/deploys)
@@ -85,7 +85,7 @@ Visit `http://localhost:3000`
 
 ## Project Structure
 
-```
+```text
 src/
 ├── app/
 │   ├── api/
@@ -170,7 +170,7 @@ src/
 4. Deploy
 
 Update WorkOS redirect URIs with your production domain:
-```
+```text
 https://yourdomain.com/api/auth/callback
 ```
 
@@ -178,7 +178,7 @@ https://yourdomain.com/api/auth/callback
 
 ### Timestamp Sharing
 Videos can be shared with specific timestamps using the `t` query parameter:
-```
+```text
 /youtube/VIDEO_ID?t=123
 ```
 The player will automatically start at the specified second.

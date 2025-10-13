@@ -14,7 +14,7 @@ export const SubtitleDisplay = memo(({ subtitle, onReportTypo }: SubtitleDisplay
 
     return (
         <div className="space-y-4">
-            <div className="fade-in slide-in-from-bottom-4 animate-in rounded-lg bg-gradient-to-r from-purple-600/90 to-blue-600/90 px-6 py-4 shadow-xl duration-500">
+            <div className="fade-slide-in rounded-lg bg-gradient-to-r from-purple-600/90 to-blue-600/90 px-6 py-4 shadow-xl duration-500">
                 <p className="text-center font-semibold text-lg text-white">{subtitle.text}</p>
             </div>
 
