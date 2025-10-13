@@ -30,6 +30,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
     try {
+        console.log('GET /typos');
         const { user } = await withAuth();
 
         if (!user) {
